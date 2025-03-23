@@ -79,7 +79,40 @@ with col2:
     st.plotly_chart(fig2, use_container_width=True, height = 200)
 
 
+runs_by_player = df_match_data.groupby(by=['striker'])['runs_off_bat'].sum()
 
+runs_by_player = runs_by_player.rename_axis('Batter')
+runs_by_player = runs_by_player.rename("Runs")
 
+run_value = st.sidebar.slider("Filter by Runs", value=(runs_by_player.min(), runs_by_player.max()))
+st.markdown(
+    """
+    <style>
+    div[role="slider"] div[data-baseweb="slider-thumb"] {
+        background-color: red; 
+    }
+    div[role="slider"] div[data-baseweb="slider-track"] {
+        background: linear-gradient(to right, red, red);
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+filtered_runs_by_player = pd.Series()
+# st.write(run_value[1])
+runs_by_player = runs_by_player.sort_values(ascending=False)
+if run_value[0] == runs_by_player.min() and run_value[1] == runs_by_player.max():
+    filtered_runs_by_player = runs_by_player
+else:
+    # for runs in runs_by_player:
+    #     if runs >= run_value[0] and runs<= run_value[1]:
+    runs_by_player = runs_by_player[ runs_by_player > run_value[0]]
+    runs_by_player = runs_by_player[ runs_by_player < run_value[1]]
+    filtered_runs_by_player = runs_by_player
+    
+            
 
+fig3 = px.bar(filtered_runs_by_player, x=filtered_runs_by_player.index, y='Runs', color='Runs', template='seaborn')
+fig3.update_traces(width = 3)
+st.plotly_chart(fig3, use_container_width=True, height = 300)
 # st.sidebar()

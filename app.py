@@ -25,13 +25,11 @@ data_col = st.sidebar.multiselect("Select a column for viewing datafield", [df_m
 st.markdown('<style>[data-testid="stSidebar"]{background-color:#e6c4ff}</style>', unsafe_allow_html=True)
 st.markdown('<style>[data-testid="stSelectionbox"]{margin-bottom:2rem}</style>', unsafe_allow_html=True)
 
-# st.write(data_col)
+
 if data_col == []:
     data_display = st.write(df_match_info_data[df_match_info_data.columns[1:]])
-    # pass
 else:
     data_display = st.write(df_match_info_data[[x for x in data_col]])
-    # pass
 
 # team_options1 = df_match_info_data['team1'].unique()[0]
 # team_options2 = df_match_info_data['team1'].unique()[1]
@@ -51,10 +49,9 @@ wins_count = wins_count.rename_axis("Team")
 wins_count = wins_count.rename("Wins")
 
 
-# st.markdown("<style>[data-testid = 'stHorizontalBlock']div.border-select-none{border:1px solid black}</style>")
 team_name = st.sidebar.multiselect("Select team to view performance", wins_count.index)
 
-# st.write(team_name)
+
 if team_name == []:
     pass
 else:
@@ -62,21 +59,29 @@ else:
 
 with col1:
     st.subheader("Team with Most Wins")
-    # st.write(wins_count.unique())
     fig1 = px.bar(wins_count, y = 'Wins', template='seaborn', color='Wins')
     st.plotly_chart(fig1, use_container_width=True, height = 200)
 
 
 
-toss_decision_wins = df_match_info_data.groupby(by=['toss_decision'])['winner'].count()
 
-toss_decision_wins = toss_decision_wins.rename_axis("Toss Decision")
-toss_decision_wins = toss_decision_wins.rename("Wins")
+if team_name == []:
+    toss_decision_wins = df_match_info_data.groupby(by=['toss_decision'])['winner'].count()
+    toss_decision_wins = toss_decision_wins.rename_axis("Toss Decision")
+    toss_decision_wins = toss_decision_wins.rename("Wins")
+else:
+    filtered_team_name = df_match_info_data[df_match_info_data['winner'].isin(team_name)]
+    st.write(filtered_team_name)
+    toss_decision_wins = filtered_team_name.groupby(by=['toss_decision'])['winner'].count()
+    toss_decision_wins = toss_decision_wins.rename_axis("Toss Decision")
+    toss_decision_wins = toss_decision_wins.rename("Wins")
+    st.write(toss_decision_wins)
 
 with col2:
-    st.subheader("Toss Decision")
+    st.subheader("Match Wins by Toss Decision")
     # st.write(toss_decision_wins)
     fig2 = px.pie(toss_decision_wins, values=toss_decision_wins, names=toss_decision_wins.index, hole=0.6)
+    fig2.update_traces(text = toss_decision_wins.index)
     st.plotly_chart(fig2, use_container_width=True, height = 200)
 
 

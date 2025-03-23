@@ -82,8 +82,14 @@ with col2:
     fig2.update_traces(text = toss_decision_wins.index)
     st.plotly_chart(fig2, use_container_width=True, height = 200)
 
+if team_name == []:
+    filtered_runs_data = df_match_data.groupby(by=['striker'])['runs_off_bat'].sum()
+else:
+    filtered_runs_data = df_match_data[df_match_data['batting_team'].isin(team_name)]
+    filtered_runs_data = filtered_runs_data.groupby(by=['striker'])['runs_off_bat'].sum()
 
-runs_by_player = df_match_data.groupby(by=['striker'])['runs_off_bat'].sum()
+
+runs_by_player = filtered_runs_data
 
 runs_by_player = runs_by_player.rename_axis('Batter')
 runs_by_player = runs_by_player.rename("Runs")
@@ -94,8 +100,8 @@ runs_by_player = runs_by_player.sort_values(ascending=False)
 if run_value[0] == runs_by_player.min() and run_value[1] == runs_by_player.max():
     filtered_runs_by_player = runs_by_player
 else:
-    runs_by_player = runs_by_player[ runs_by_player > run_value[0]]
-    runs_by_player = runs_by_player[ runs_by_player < run_value[1]]
+    runs_by_player = runs_by_player[ runs_by_player >= run_value[0]]
+    runs_by_player = runs_by_player[ runs_by_player <= run_value[1]]
     filtered_runs_by_player = runs_by_player
     
             
@@ -105,8 +111,14 @@ fig3.update_traces(width = 3)
 st.plotly_chart(fig3, use_container_width=True, height = 500)
 
 
+if team_name == []:
+    filtered_wickets_data = df_match_data.groupby(by=['bowler'])['player_dismissed'].count()
+else:
+    filtered_wickets_data = df_match_data[df_match_data['bowling_team'].isin(team_name)]
+    filtered_wickets_data = filtered_wickets_data.groupby(by=['bowler'])['player_dismissed'].count()
 
-wicket_by_player = df_match_data.groupby(by=['bowler'])['player_dismissed'].count()
+
+wicket_by_player = filtered_wickets_data
 wicket_by_player = wicket_by_player.rename_axis('Bowler')
 wicket_by_player = wicket_by_player.rename('Wickets')
 
@@ -122,8 +134,8 @@ wicket_by_player = wicket_by_player.sort_values(ascending=False)
 if wicket_value[0] == wicket_by_player.min() and wicket_value[1] == wicket_by_player.max():
     filtered_wicket_by_player = wicket_by_player
 else:
-    wicket_by_player = wicket_by_player[wicket_by_player > wicket_value[0]]
-    wicket_by_player = wicket_by_player[wicket_by_player < wicket_value[1]]
+    wicket_by_player = wicket_by_player[wicket_by_player >= wicket_value[0]]
+    wicket_by_player = wicket_by_player[wicket_by_player <= wicket_value[1]]
     filtered_wicket_by_player = wicket_by_player
 
 fig4 = px.bar(filtered_wicket_by_player, x = wicket_by_player.index, y = 'Wickets', color='Wickets', template='seaborn', color_continuous_scale='viridis')

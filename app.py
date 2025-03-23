@@ -50,8 +50,9 @@ wins_count = df_match_info_data.groupby(by = ['winner'], as_index=True)['winner'
 wins_count = wins_count.rename_axis("Team")
 wins_count = wins_count.rename("Wins")
 
+
 # st.markdown("<style>[data-testid = 'stHorizontalBlock']div.border-select-none{border:1px solid black}</style>")
-team_name = st.sidebar.multiselect("Select team to view performance", df_match_info_data['winner'].unique())
+team_name = st.sidebar.multiselect("Select team to view performance", wins_count.index)
 
 # st.write(team_name)
 if team_name == []:
@@ -75,7 +76,7 @@ toss_decision_wins = toss_decision_wins.rename("Wins")
 with col2:
     st.subheader("Toss Decision")
     # st.write(toss_decision_wins)
-    fig2 = px.pie(toss_decision_wins, values=toss_decision_wins, names=toss_decision_wins.index)
+    fig2 = px.pie(toss_decision_wins, values=toss_decision_wins, names=toss_decision_wins.index, hole=0.6)
     st.plotly_chart(fig2, use_container_width=True, height = 200)
 
 

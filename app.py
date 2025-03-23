@@ -71,11 +71,9 @@ if team_name == []:
     toss_decision_wins = toss_decision_wins.rename("Wins")
 else:
     filtered_team_name = df_match_info_data[df_match_info_data['winner'].isin(team_name)]
-    st.write(filtered_team_name)
     toss_decision_wins = filtered_team_name.groupby(by=['toss_decision'])['winner'].count()
     toss_decision_wins = toss_decision_wins.rename_axis("Toss Decision")
     toss_decision_wins = toss_decision_wins.rename("Wins")
-    st.write(toss_decision_wins)
 
 with col2:
     st.subheader("Match Wins by Toss Decision")

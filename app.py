@@ -78,7 +78,7 @@ else:
 with col2:
     st.subheader("Match Wins by Toss Decision")
     # st.write(toss_decision_wins)
-    fig2 = px.pie(toss_decision_wins, values=toss_decision_wins, names=toss_decision_wins.index, hole=0.6)
+    fig2 = px.pie(toss_decision_wins, values=toss_decision_wins, names=toss_decision_wins.index, hole=0.65)
     fig2.update_traces(text = toss_decision_wins.index)
     st.plotly_chart(fig2, use_container_width=True, height = 200)
 
@@ -106,7 +106,7 @@ else:
     
             
 color_sequence = ['green', 'salmon', 'lightgreen', 'orange']
-fig3 = px.bar(filtered_runs_by_player, x=filtered_runs_by_player.index, y='Runs', color = 'Runs', template='seaborn')
+fig3 = px.bar(filtered_runs_by_player, x=filtered_runs_by_player.index, y='Runs', color = 'Runs', template='seaborn', color_continuous_scale='viridis')
 fig3.update_traces(width = 3)
 st.plotly_chart(fig3, use_container_width=True, height = 500)
 
@@ -138,6 +138,36 @@ else:
     wicket_by_player = wicket_by_player[wicket_by_player <= wicket_value[1]]
     filtered_wicket_by_player = wicket_by_player
 
-fig4 = px.bar(filtered_wicket_by_player, x = wicket_by_player.index, y = 'Wickets', color='Wickets', template='seaborn', color_continuous_scale='viridis')
+fig4 = px.bar(filtered_wicket_by_player, x = wicket_by_player.index, y = 'Wickets', color='Wickets', template='seaborn')
 fig4.update_traces(width = 3)
 st.plotly_chart(fig4, use_container_width=True, height = 500)
+
+if team_name == []:
+    matches_played_in_venue = df_match_info_data.groupby(by=['venue'])['venue'].count()
+else:
+    filtered_venue_data = df_match_info_data[df_match_info_data['team1'].isin(team_name) | df_match_info_data['team2'].isin(team_name)]
+    matches_played_in_venue = filtered_venue_data.groupby(by=['venue'])['venue'].count()
+
+
+# st.write(matches_played_in_venue)
+
+matches_played_in_venue = matches_played_in_venue.rename_axis('Stadium')
+matches_played_in_venue = matches_played_in_venue.rename('Matches Played')
+
+stadium_selected = st.sidebar.multiselect("Select the Stadium", matches_played_in_venue.index)
+filtered_matches_played_in_venue = pd.Series()
+filtered_matches_played_in_venue = filtered_matches_played_in_venue.rename("Matches Played")
+filtered_matches_played_in_venue = filtered_matches_played_in_venue.rename_axis("Stadium")
+
+if stadium_selected == []:
+    pass
+else:
+    for x in stadium_selected:
+        filtered_matches_played_in_venue[x] = matches_played_in_venue[x]
+    matches_played_in_venue = filtered_matches_played_in_venue
+
+fig5 = px.bar(matches_played_in_venue, y='Matches Played', color='Matches Played', color_continuous_scale='blackbody', template='seaborn')
+fig5.update_traces(width = 3)
+st.plotly_chart(fig5, use_container_width=True, height = 500)
+
+

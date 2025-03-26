@@ -104,7 +104,7 @@ else:
     runs_by_player = runs_by_player[ runs_by_player <= run_value[1]]
     filtered_runs_by_player = runs_by_player
     
-            
+st.header("Most Runs Scored by Batter")          
 color_sequence = ['green', 'salmon', 'lightgreen', 'orange']
 fig3 = px.bar(filtered_runs_by_player, x=filtered_runs_by_player.index, y='Runs', color = 'Runs', template='seaborn', color_continuous_scale='viridis')
 fig3.update_traces(width = 3)
@@ -138,6 +138,7 @@ else:
     wicket_by_player = wicket_by_player[wicket_by_player <= wicket_value[1]]
     filtered_wicket_by_player = wicket_by_player
 
+st.header("Most Wickets taken by Bowler")
 fig4 = px.bar(filtered_wicket_by_player, x = wicket_by_player.index, y = 'Wickets', color='Wickets', template='seaborn')
 fig4.update_traces(width = 3)
 st.plotly_chart(fig4, use_container_width=True, height = 500)
@@ -166,6 +167,7 @@ else:
         filtered_matches_played_in_venue[x] = matches_played_in_venue[x]
     matches_played_in_venue = filtered_matches_played_in_venue
 
+st.header("Matches Played in Venues")
 fig5 = px.bar(matches_played_in_venue, y='Matches Played', color='Matches Played', color_continuous_scale='blackbody', template='seaborn')
 fig5.update_traces(width = 3)
 st.plotly_chart(fig5, use_container_width=True, height = 500)

@@ -1,5 +1,7 @@
 # 🏏 IPL Analytics Dashboard
 
+![IPL Dashboard](static/readme_img/image.png)
+
 An interactive data analytics dashboard built using **Python, Streamlit, Plotly, and Tableau** to explore historical Indian Premier League (IPL) data. The project processes over **50,000+ match and ball-by-ball records** to generate meaningful insights into team performance, player statistics, match outcomes, and tournament trends.
 
 The dataset was sourced from **Kaggle**, preprocessed using **Pandas** in **Jupyter Notebook**, visualized using **Tableau** and **Plotly**, and deployed on **Streamlit Community Cloud**, enabling users to interactively analyze IPL data through a modern web interface.
